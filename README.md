@@ -1,4 +1,4 @@
 go-api-trial
 ============
 
-just could not resist the speed damn
+Trial of Golang on a legacy WP DB 
