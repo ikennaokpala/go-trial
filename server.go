@@ -1,19 +1,23 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
-
+	"github.com/albrow/negroni-json-recovery"
 	"github.com/codegangsta/negroni"
+	"github.com/gorilla/mux"
+
+	"bitbucket.org/globalfoodbook/api/controllers"
 )
 
 func main() {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
-		fmt.Fprintf(w, "Welcome to the home page!")
-	})
 
-	n := negroni.Classic()
-	n.UseHandler(mux)
-	n.Run(":3000")
+	router := mux.NewRouter()
+	posts := controllers.Posts{}
+
+	router.HandleFunc("/posts", posts.Index).Methods("GET")
+
+	n := negroni.New(negroni.NewLogger())
+	n.Use(recovery.JSONRecovery(true))
+	n.UseHandler(router)
+
+	n.Run(":3421")
 }
